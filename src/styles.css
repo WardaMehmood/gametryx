@@ -110,10 +110,18 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    /* Background gradients moved to ::before to avoid repaint on scroll */
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background-image:
       radial-gradient(circle at 15% 10%, oklch(0.55 0.28 305 / 0.18), transparent 45%),
       radial-gradient(circle at 85% 80%, oklch(0.7 0.32 340 / 0.12), transparent 50%);
-    background-attachment: fixed;
+    will-change: transform;
   }
   h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
 }
@@ -124,6 +132,9 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid oklch(0.55 0.28 305 / 0.25);
+    /* Promote to its own GPU compositing layer — avoids repaint cascade */
+    will-change: transform;
+    transform: translateZ(0);
   }
   .neon-text {
     background: linear-gradient(135deg, oklch(0.85 0.18 200), oklch(0.55 0.28 305), oklch(0.7 0.32 340));

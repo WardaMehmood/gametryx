@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { GAMES } from '@/data/games'
 import { Download, Star, Info, Share2, ChevronLeft } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
+import { useGames } from '@/hooks/useGames'
 
 export const Route = createFileRoute('/game/$id')({
   component: GameDetailsComponent,
@@ -9,7 +9,42 @@ export const Route = createFileRoute('/game/$id')({
 
 function GameDetailsComponent() {
   const { id } = Route.useParams()
-  const game = GAMES.find(g => g.id === id)
+  const { games, loading, error } = useGames()
+  const game = games.find(g => g.id === id)
+
+  if (loading) {
+    return (
+      <div className="container mx-auto max-w-4xl px-4 py-8 animate-pulse">
+        <div className="mb-6 h-4 w-24 bg-white/5 rounded"></div>
+        <div className="flex flex-col gap-6 md:flex-row md:items-start">
+          <div className="shrink-0">
+            <div className="size-32 rounded-2xl glass md:size-48" />
+          </div>
+          <div className="flex flex-1 flex-col justify-center space-y-4 w-full">
+            <div>
+              <div className="h-10 w-3/4 rounded-md glass mb-2" />
+              <div className="h-6 w-1/3 rounded-md glass" />
+            </div>
+            <div className="flex gap-4">
+              <div className="h-8 w-20 rounded-full glass" />
+              <div className="h-8 w-16 rounded-full glass" />
+            </div>
+            <div className="h-12 w-48 rounded-xl glass mt-2" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4">
+        <h2 className="text-2xl font-bold text-destructive">Error Loading Game</h2>
+        <p className="text-muted-foreground">{error}</p>
+        <Link to="/" className="text-primary hover:underline">Return to Home</Link>
+      </div>
+    )
+  }
 
   if (!game) {
     return (
@@ -34,6 +69,7 @@ function GameDetailsComponent() {
             src={game.thumbnail} 
             alt={game.title} 
             className="size-32 rounded-2xl object-cover shadow-2xl md:size-48 border border-white/10"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
           />
         </div>
         

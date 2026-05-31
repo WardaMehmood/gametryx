@@ -7,10 +7,10 @@ export function GameCard({ game, index = 0 }: { game: Game; index?: number }) {
   return (
     <Link to="/game/$id" params={{ id: game.id }} className="block">
       <motion.article
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.5, delay: (index % 5) * 0.05 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.4, delay: (index % 5) * 0.05 }}
         className="group hover-glow relative overflow-hidden rounded-2xl glass"
       >
       <div className="relative aspect-video overflow-hidden">
@@ -18,9 +18,11 @@ export function GameCard({ game, index = 0 }: { game: Game; index?: number }) {
           src={game.thumbnail}
           alt={game.title}
           loading="lazy"
+          decoding="async"
           width={960}
           height={544}
           className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+          onError={(e) => { e.currentTarget.style.display = 'none' }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
         <span className="absolute left-3 top-3 rounded-full border border-primary/50 bg-background/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-foreground backdrop-blur">

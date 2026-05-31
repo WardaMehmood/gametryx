@@ -7,7 +7,6 @@ const links = [
   { href: "#home", label: "Home" },
   { href: "#categories", label: "Categories" },
   { href: "#trending", label: "Trending" },
-  { href: "#upload", label: "Upload" },
 ];
 
 export function Header() {
@@ -15,10 +14,19 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    let rafId: number;
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 12);
+      });
+    };
     onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (

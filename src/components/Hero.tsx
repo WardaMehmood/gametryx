@@ -1,18 +1,19 @@
 import { motion } from "framer-motion";
 import { Search, ChevronDown } from "lucide-react";
 import heroBg from "@/assets/hero-bg.png";
-import { CATEGORIES } from "@/data/games";
 
 export function Hero({
   searchQuery,
   setSearchQuery,
   selectedCategory,
   setSelectedCategory,
+  categories = [],
 }: {
   searchQuery: string;
   setSearchQuery: (val: string) => void;
   selectedCategory: string;
   setSelectedCategory: (val: string) => void;
+  categories?: string[];
 }) {
   return (
     <section id="home" className="relative h-screen w-full overflow-hidden">
@@ -62,7 +63,7 @@ export function Hero({
                   className="flex-1 md:flex-none cursor-pointer rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary appearance-none"
                 >
                   <option value="All" className="bg-background">All Categories</option>
-                  {CATEGORIES.map((cat) => (
+                  {categories.map((cat) => (
                     <option key={cat} value={cat} className="bg-background">
                       {cat}
                     </option>
