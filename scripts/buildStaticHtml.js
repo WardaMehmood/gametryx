@@ -13,6 +13,7 @@ const files = fs.readdirSync(assetsDir);
 const cssFiles = files.filter((f) => f.endsWith(".css"));
 const jsFiles = files.filter((f) => f.endsWith(".js"));
 
+// Sort by size descending — largest JS file is the main React app bundle
 const jsFilesSorted = jsFiles
   .map((f) => {
     const stat = fs.statSync(path.join(assetsDir, f));
@@ -31,14 +32,20 @@ if (!mainJs) {
   process.exit(1);
 }
 
+const cssLink = mainCss ? `<link rel="stylesheet" href="./assets/${mainCss}" />` : "";
+
 const html = `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gametryx - Indie Game Showcase</title>
+    <title>Game Tryx — Discover. Download. Play.</title>
+    <meta name="description" content="Neon-lit indie game showcase. Discover, download and play games crafted by developers and students." />
     <link rel="icon" type="image/png" href="./favicon.png" />
-    ${mainCss ? `<link rel="stylesheet" href="./assets/${mainCss}" />` : ""}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    ${cssLink}
   </head>
   <body>
     <div id="root"></div>
@@ -49,4 +56,6 @@ const html = `<!DOCTYPE html>
 fs.writeFileSync(path.join(clientDir, "index.html"), html);
 fs.writeFileSync(path.join(clientDir, "404.html"), html);
 
-console.log(`Successfully generated index.html & 404.html using JS: ${mainJs}, CSS: ${mainCss}`);
+console.log(`✅ Generated index.html & 404.html`);
+console.log(`   JS bundle: ${mainJs}`);
+console.log(`   CSS file:  ${mainCss || "(embedded in JS)"}`);
