@@ -2,7 +2,7 @@ name: Deploy React (Vite) to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
 
 permissions:
   contents: read
@@ -10,7 +10,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -35,11 +35,8 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Generate static index.html & 404.html for GitHub Pages
+      - name: Inject static index.html & 404.html for GitHub Pages
         run: |
-          CSS_FILE=$(basename $(ls dist/client/assets/styles-*.css | head -n 1))
-          JS_FILE=$(basename $(ls dist/client/assets/index-*.js | head -n 1))
-
           cat <<EOF > dist/client/index.html
           <!DOCTYPE html>
           <html lang="en">
@@ -48,11 +45,27 @@ jobs:
               <meta name="viewport" content="width=device-width, initial-scale=1.0" />
               <title>Gametryx - Indie Game Showcase</title>
               <link rel="icon" type="image/png" href="./favicon.png" />
-              <link rel="stylesheet" href="./assets/${CSS_FILE}" />
+          EOF
+
+          for css in dist/client/assets/*.css; do
+            if [ -f "$css" ]; then
+              echo "    <link rel=\"stylesheet\" href=\"./assets/\$(basename \$css)\" />" >> dist/client/index.html
+            fi
+          done
+
+          cat <<EOF >> dist/client/index.html
             </head>
             <body>
               <div id="root"></div>
-              <script type="module" src="./assets/${JS_FILE}"></script>
+          EOF
+
+          for js in dist/client/assets/*.js; do
+            if [ -f "$js" ]; then
+              echo "    <script type=\"module\" src=\"./assets/\$(basename \$js)\"></script>" >> dist/client/index.html
+            fi
+          done
+
+          cat <<EOF >> dist/client/index.html
             </body>
           </html>
           EOF
@@ -65,7 +78,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "./dist/client"
+          path: './dist/client'
 
       - name: Deploy to GitHub Pages
         id: deployment
