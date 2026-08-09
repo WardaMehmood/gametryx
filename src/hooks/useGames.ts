@@ -1,22 +1,22 @@
 import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { Game } from "../data/games";
+import { FALLBACK_GAMES } from "../data/fallbackGames";
 
 export function useGames() {
-  const [games, setGames] = useState<Game[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [games, setGames] = useState<Game[]>(FALLBACK_GAMES);
+  const [loading, setLoading] = useState(false);
+  const [error] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchGames() {
       try {
-        // Fetch directly from Google Sheets CSV export (Real-time updates without redeploy)
         const CSV_URL =
           "https://docs.google.com/spreadsheets/d/19CVf_oS3dByqMt--c8tjNGhGLYcslc-fEpYQe6lEwZg/export?format=csv";
         const response = await fetch(CSV_URL);
 
         if (!response.ok) {
-          throw new Error("Failed to fetch data from Google Sheets.");
+          return;
         }
 
         const arrayBuffer = await response.arrayBuffer();
@@ -25,7 +25,6 @@ export function useGames() {
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
 
-        // Convert sheet to JSON array
         const rawData = XLSX.utils.sheet_to_json<Record<string, unknown>>(worksheet);
 
         const parsedGames: Game[] = [];
@@ -34,13 +33,11 @@ export function useGames() {
           const title = String(row["Game Name"] || "");
           const driveLink = String(row["Project Google Drive link"] || "");
 
-          // Skip if title or drive link is missing
           if (!title.trim() || !driveLink.trim()) return;
 
           const developer = String(row["Group Name with ids"] || "Unknown Developer");
           const fullDesc = String(row["Game Description with genre"] || "");
 
-          // --- Category resolution (3-step fallback) ---
           const VALID_CATEGORIES = [
             "Action",
             "Arcade",
@@ -57,19 +54,15 @@ export function useGames() {
 
           let category = "";
 
-          // Step 1: Read from pre-classified 'Category' column (existing Excel rows)
           const rawCategory = String(row["Category"] || "").trim();
           if (VALID_CATEGORIES.includes(rawCategory)) {
             category = rawCategory;
           }
 
-          // Step 2: New form submissions — our form appends ", Category" at end of description
-          // e.g. "A cool shooter game, Action"
           if (!category && fullDesc) {
             const lastComma = fullDesc.lastIndexOf(",");
             if (lastComma !== -1) {
               const afterComma = fullDesc.substring(lastComma + 1).trim();
-              // Match last word which might be the category
               const lastWord = afterComma.split(/\s+/).pop() || "";
               if (VALID_CATEGORIES.includes(lastWord)) {
                 category = lastWord;
@@ -79,7 +72,6 @@ export function useGames() {
             }
           }
 
-          // Step 3: Smart keyword classification as final fallback
           if (!category) {
             const text = (title + " " + fullDesc).toLowerCase();
             if (
@@ -113,21 +105,18 @@ export function useGames() {
             title: title.trim(),
             developer: developer.trim(),
             category,
-            thumbnail: "", // Empty string as requested
+            thumbnail: "",
             driveLink: driveLink.trim(),
             description: fullDesc.trim(),
             screenshots: [],
           });
         });
 
-        setGames(parsedGames);
-        setLoading(false);
+        if (parsedGames.length > 0) {
+          setGames(parsedGames);
+        }
       } catch (err: unknown) {
-        console.error("Error loading games from Excel:", err);
-        const errorMessage =
-          err instanceof Error ? err.message : "An error occurred while loading games.";
-        setError(errorMessage);
-        setLoading(false);
+        console.warn("Could not fetch live Google Sheets data, using pre-loaded games.", err);
       }
     }
 
