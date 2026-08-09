@@ -37,6 +37,9 @@ jobs:
 
       - name: Inject static index.html & 404.html for GitHub Pages
         run: |
+          CSS_FILE=$(basename $(ls -S dist/client/assets/styles-*.css 2>/dev/null | head -n 1))
+          ENTRY_JS=$(basename $(ls -S dist/client/assets/index-*.js 2>/dev/null | head -n 1))
+
           cat <<EOF > dist/client/index.html
           <!DOCTYPE html>
           <html lang="en">
@@ -45,27 +48,11 @@ jobs:
               <meta name="viewport" content="width=device-width, initial-scale=1.0" />
               <title>Gametryx - Indie Game Showcase</title>
               <link rel="icon" type="image/png" href="./favicon.png" />
-          EOF
-
-          for css in dist/client/assets/*.css; do
-            if [ -f "$css" ]; then
-              echo "    <link rel=\"stylesheet\" href=\"./assets/\$(basename \$css)\" />" >> dist/client/index.html
-            fi
-          done
-
-          cat <<EOF >> dist/client/index.html
+              <link rel="stylesheet" href="./assets/${CSS_FILE}" />
             </head>
             <body>
               <div id="root"></div>
-          EOF
-
-          for js in dist/client/assets/*.js; do
-            if [ -f "$js" ]; then
-              echo "    <script type=\"module\" src=\"./assets/\$(basename \$js)\"></script>" >> dist/client/index.html
-            fi
-          done
-
-          cat <<EOF >> dist/client/index.html
+              <script type="module" src="./assets/${ENTRY_JS}"></script>
             </body>
           </html>
           EOF
