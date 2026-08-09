@@ -35,29 +35,8 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Inject static index.html & 404.html for GitHub Pages
-        run: |
-          CSS_FILE=$(basename $(ls -S dist/client/assets/styles-*.css 2>/dev/null | head -n 1))
-          ENTRY_JS=$(basename $(ls -S dist/client/assets/index-*.js 2>/dev/null | head -n 1))
-
-          cat <<EOF > dist/client/index.html
-          <!DOCTYPE html>
-          <html lang="en">
-            <head>
-              <meta charset="UTF-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-              <title>Gametryx - Indie Game Showcase</title>
-              <link rel="icon" type="image/png" href="./favicon.png" />
-              <link rel="stylesheet" href="./assets/${CSS_FILE}" />
-            </head>
-            <body>
-              <div id="root"></div>
-              <script type="module" src="./assets/${ENTRY_JS}"></script>
-            </body>
-          </html>
-          EOF
-
-          cp dist/client/index.html dist/client/404.html
+      - name: Inject static index.html & 404.html
+        run: node scripts/buildStaticHtml.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
