@@ -24,26 +24,6 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Game Tryx — Discover. Download. Play." },
-      {
-        name: "description",
-        content:
-          "Neon-lit indie game showcase. Discover, download and play games crafted by developers and students.",
-      },
-      { property: "og:title", content: "Game Tryx — Indie Game Showcase" },
-      { property: "og:description", content: "A futuristic gaming launcher for indie creators." },
-    ],
-    links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap",
-      },
-    ],
-  }),
   component: Index,
 });
 
