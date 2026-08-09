@@ -49,6 +49,8 @@ const html = `<!DOCTYPE html>
   </head>
   <body>
     <div id="root"></div>
+    <!-- TanStack Start SSR shim: prevents "Invariant failed" on static hosts -->
+    <script>window.__TSR_DEHYDRATED__ = window.__TSR_DEHYDRATED__ || { dehydrated: { router: null, ctx: {} } };</script>
     <script type="module" src="./assets/${mainJs}"></script>
   </body>
 </html>`;
