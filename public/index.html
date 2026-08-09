@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Tryx — Discover. Download. Play.</title>
+  <meta name="description" content="Neon-lit indie game showcase. Discover, download and play 48 games crafted by students." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0612;
+      --surface: #110d1e;
+      --card: #160f28;
+      --border: rgba(139,92,246,0.18);
+      --purple: #7c3aed;
+      --violet: #8b5cf6;
+      --pink: #ec4899;
+      --cyan: #06b6d4;
+      --text: #f1f0f5;
+      --muted: #9d8fc0;
+      --radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,6,18,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+    }
+    .header-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      padding: 6rem 2rem 5rem;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 30% 40%, rgba(124,58,237,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 70% 60%, rgba(236,72,153,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--violet);
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.3);
+      padding: 0.3rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      position: relative;
+      max-width: 520px;
+      margin: 0 auto 1.5rem;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 1.1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 3rem;
+      background: rgba(22,15,40,0.8);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    #searchInput::placeholder { color: var(--muted); }
+    #searchInput:focus {
+      border-color: var(--violet);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+    }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-top: 2rem;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--violet);
+    }
+    .stat-label { font-size: 0.75rem; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
+
+    /* ── CATEGORY PILLS ── */
+    .filters-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 0;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(139,92,246,0.25);
+      background: rgba(22,15,40,0.6);
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .pill:hover { border-color: var(--violet); color: var(--text); transform: scale(1.04); }
+    .pill.active {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      border-color: rgba(139,92,246,0.7);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(124,58,237,0.4);
+    }
+    .pill .count {
+      background: rgba(255,255,255,0.15);
+      border-radius: 999px;
+      padding: 0 6px;
+      font-size: 0.7rem;
+    }
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(139,92,246,0.3), transparent);
+      margin-bottom: 2rem;
+    }
+
+    /* ── GRID ── */
+    .grid-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 1.2rem;
+    }
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ── GAME CARD ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+      cursor: default;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(139,92,246,0.5);
+      box-shadow: 0 12px 32px rgba(124,58,237,0.2);
+    }
+    .card-thumb {
+      aspect-ratio: 16/10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-body {
+      padding: 0.9rem 1rem 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .card-category {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--violet);
+    }
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-dev {
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-btn {
+      margin-top: auto;
+      padding-top: 0.7rem;
+    }
+    .btn-download {
+      display: block;
+      width: 100%;
+      padding: 0.5rem;
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(109,40,217,0.2));
+      border: 1px solid rgba(139,92,246,0.35);
+      border-radius: 8px;
+      color: var(--violet);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.18s;
+    }
+    .btn-download:hover {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(124,58,237,0.35);
+    }
+    .btn-no-link {
+      opacity: 0.35;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    /* Category color palettes */
+    .cat-action    { background: linear-gradient(135deg, #1a0a2e, #3b0764); }
+    .cat-puzzle    { background: linear-gradient(135deg, #0a1a2e, #1e3a5f); }
+    .cat-racing    { background: linear-gradient(135deg, #1a0a0a, #5f1e1e); }
+    .cat-horror    { background: linear-gradient(135deg, #0a0a0a, #1a0a0a); }
+    .cat-arcade    { background: linear-gradient(135deg, #0a1e0a, #1e5f1e); }
+    .cat-rpg       { background: linear-gradient(135deg, #1a1a0a, #5f5f1e); }
+    .cat-platformer{ background: linear-gradient(135deg, #0a1a1a, #1e5f5f); }
+    .cat-simulation{ background: linear-gradient(135deg, #0a0a1a, #1e1e5f); }
+    .cat-strategy  { background: linear-gradient(135deg, #1a0a1a, #5f1e5f); }
+    .cat-survival  { background: linear-gradient(135deg, #1a0e0a, #5f2a1e); }
+    .cat-adventure { background: linear-gradient(135deg, #0a1a0e, #1e5f2a); }
+    .cat-default   { background: linear-gradient(135deg, #110d1e, #1e1530); }
+
+    /* Emoji per category */
+    .em-action::before     { content: '⚔️'; }
+    .em-puzzle::before     { content: '🧩'; }
+    .em-racing::before     { content: '🏎️'; }
+    .em-horror::before     { content: '💀'; }
+    .em-arcade::before     { content: '🕹️'; }
+    .em-rpg::before        { content: '🧙'; }
+    .em-platformer::before { content: '🎮'; }
+    .em-simulation::before { content: '🏙️'; }
+    .em-strategy::before   { content: '♟️'; }
+    .em-survival::before   { content: '🛡️'; }
+    .em-adventure::before  { content: '🗺️'; }
+    .em-default::before    { content: '🎲'; }
+
+    /* ── UPLOAD SECTION ── */
+    .upload-section {
+      background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(236,72,153,0.05));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .upload-section h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+    .upload-section p { color: var(--muted); margin-bottom: 1.8rem; }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      border: none;
+      border-radius: 999px;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: scale(1.04); box-shadow: 0 0 24px rgba(124,58,237,0.4); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer .logo { font-size: 1rem; display: inline-block; margin-bottom: 0.5rem; }
+
+    /* ── NO RESULTS ── */
+    .no-results {
+      text-align: center;
+      padding: 5rem 1rem;
+      color: var(--muted);
+    }
+    .no-results h3 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--text); margin-bottom: 0.5rem; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .stats { gap: 1.5rem; }
+      .games-grid { grid-template-columns: repeat(2, 1fr); }
+      header { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">GAME TRYX</div>
+  <div class="header-badge">Indie Game Showcase</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">🎮 Student Game Showcase 2024</div>
+  <h1>Discover.<br/><span>Download. Play.</span></h1>
+  <p class="hero-sub">48 indie games crafted by students. From horror to racing, puzzle to RPG — explore them all.</p>
+
+  <div class="search-wrap">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" id="searchInput" placeholder="Search games or developers…" autocomplete="off" />
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="totalCount">48</div><div class="stat-label">Games</div></div>
+    <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Categories</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free</div></div>
+  </div>
+</section>
+
+<!-- FILTERS + GRID -->
+<div class="filters-wrap">
+  <div class="filters" id="filters"></div>
+  <div class="divider"></div>
+</div>
+
+<div class="grid-section">
+  <div class="section-title" id="sectionTitle">All Games</div>
+  <div class="games-grid" id="gamesGrid"></div>
+  <div class="no-results" id="noResults" style="display:none">
+    <h3>No games found</h3>
+    <p>Try a different search term or category</p>
+  </div>
+</div>
+
+<!-- UPLOAD SECTION -->
+<section class="upload-section">
+  <h2>🚀 Submit Your Game</h2>
+  <p>Are you a student developer? Share your creation with the community.</p>
+  <a class="btn-primary" href="https://forms.gle/your-form-link" target="_blank" rel="noopener">
+    ✦ Submit Game
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">GAME TRYX</div>
+  <p>© 2024 Game Tryx — All games belong to their respective student developers.</p>
+</footer>
+
+<script>
+const GAMES = [
+  { id:"row_1", title:"Dream World", dev:"Maria Dev", cat:"Horror", link:"https://drive.google.com/file/d/1WTgymHO9MGxJs9rZKjM-4cLN5NGGawXq/view?usp=sharing" },
+  { id:"row_2", title:"Go Board Game", dev:"Izaz 15241, Hammad 15156, Wahid Rehman 15134", cat:"Strategy", link:"https://drive.google.com/file/d/1vy04IsXsmu6Qtl0LIEzeoe9Vk9ibsmqr/view?usp=sharing" },
+  { id:"row_3", title:"SlideAndSolve", dev:"Atta Ullah (14689) & Ahsan Iqbal (14812)", cat:"Puzzle", link:"https://drive.google.com/drive/folders/1nr3CtNC1S4NbqoutrVo1RC1Jata0mx5u?usp=drive_link" },
+  { id:"row_4", title:"LevelUpLegends", dev:"M.Abbas (14656), M.Irshad (14659), Zohaib (14738)", cat:"Action", link:"https://drive.google.com/file/d/1Kl7uDX9YOa0jeRD1Y6IcOv7ED2nxfCE-/view?usp=drive_link" },
+  { id:"row_5", title:"Ball Rolling Maze", dev:"Muzammil Ahmad (15076), Yasir Khan (15090)", cat:"Arcade", link:"https://drive.google.com/drive/folders/1Va9vu6lvO8malO2BTS-vCHpGMpBOPBhi?usp=sharing" },
+  { id:"row_6", title:"Island Beast Runner", dev:"Tariq (14750), Umar Abbas (14723)", cat:"Arcade", link:"https://drive.google.com/file/d/1T3A22fufGZ2L1NHYQj7OVPv2D8IfuSwc/view?usp=sharing" },
+  { id:"row_8", title:"Block Master", dev:"Ahtesham 14762, Atif Khan 15142, Bakhtawar 15142", cat:"Puzzle", link:"https://drive.google.com/file/d/1Wv1R4yhVtmpu3qq1-XVQfTrSmps14n2z/view?usp=drive_link" },
+  { id:"row_9", title:"Shadow Escape", dev:"Ihtisham Ullah (14687), Abdullah Naqib, M.Ilyas (14676)", cat:"Puzzle", link:"https://drive.google.com/drive/folders/1hf9mtAn8vb7FH1NIMyRLZhuYgusWE5d3?usp=sharing" },
+  { id:"row_10", title:"Parkour", dev:"Student 14632", cat:"Action", link:"https://drive.google.com/drive/folders/1rdd6WOypqDciF25zyjBxIkVBUdzDnDT0?usp=sharing" },
+  { id:"row_12", title:"Tiny Legions", dev:"Rashid Noor 14682, Urwa Noor 14648", cat:"Puzzle", link:"https://drive.google.com/file/d/1_6R0JLFQjXK2cOC5MqSq8kHfL_FnqGdS/view?usp=drive_link" },
+  { id:"row_13", title:"HOP", dev:"Mahnoor Sajjad (14782), Ayesha Khan (14752), M.Danyal (14639)", cat:"Arcade", link:"https://drive.google.com/drive/folders/1vN_u7CojsbLNLq_3T-w_jEQdrkLXoTjx?usp=sharing" },
+  { id:"row_14", title:"Racing Car", dev:"Iqrar Shah (14787)", cat:"Racing", link:"https://drive.google.com/drive/folders/19HVhlQ5jPLHwki46WSYwRkubo8PXkIGq?usp=sharing" },
+  { id:"row_15", title:"Road Rush", dev:"Maliha Shahzad (15171), Momal Shah (14817), Gul Bashra (15212)", cat:"Racing", link:"https://drive.google.com/drive/folders/1HMUr87jrc6UBXFH1548oM49UzvLzDLj0?usp=sharing" },
+  { id:"row_16", title:"Angry Bird", dev:"Asim 15111 & Jehad", cat:"Puzzle", link:"https://drive.google.com/file/d/1JCcGucDAW-usa0E8eELx3FW9JzcHFgWt/view?usp=drive_link" },
+  { id:"row_17", title:"Granny Escape", dev:"M.Zubair (14885), M.Sohail (15396), Abdur Rahman (15290)", cat:"Horror", link:"https://drive.google.com/file/d/1UZG4pNo6tCSf5Lj6k8m3Ane5RZ2hRgOh/view?usp=drive_link" },
+  { id:"row_18", title:"Dotix", dev:"M.Awais (14629), Raheel Khan (14749)", cat:"Action", link:"https://drive.google.com/file/d/11fMmr77NdRP6hjfmmmvKxobFcH1YRWuK/view?usp=drive_link" },
+  { id:"row_19", title:"Night of Dead", dev:"Usman Azeem 15452, Feroz Shah 15438", cat:"Action", link:"https://drive.google.com/drive/folders/1wn-fEpQUwCya815LgBuDoGr38XcuPohC?usp=drive_link" },
+  { id:"row_20", title:"Puzzle Verse", dev:"Ghayas Awan 14808, Muqeeb Amir 14961", cat:"Puzzle", link:"https://drive.google.com/file/d/1LKZzKwsyBlfft_XfwXQadPDtTs0k4qJm/view?usp=sharing" },
+  { id:"row_21", title:"Penguin Run", dev:"Tafheem Shah, Ubaid Ullah (15021), Taimoor Khan (15025)", cat:"Action", link:"https://drive.google.com/drive/folders/1E2sVX8-4UEFFW1xbPz2fJ27JUhmTK5np?usp=sharing" },
+  { id:"row_22", title:"AGENT 247", dev:"Warda Mehmood (14672), Ali Saad Khan (14757), M.Hamza (14761)", cat:"RPG", link:"https://drive.google.com/file/d/18C4qQdC2vyr6erSa5XvgEdbcgHDrV6Mx/view?usp=drive_link" },
+  { id:"row_23", title:"Last One", dev:"Sohaib (14838), Musa (14891), Hassan (14835)", cat:"Platformer", link:"https://drive.google.com/file/d/1Uk8xtn2Ph0015B8kUk7iGsB99fUUrGC9/view?usp=sharing" },
+  { id:"row_24", title:"Hunted House", dev:"Zohaib Shah 14910, M.Atif Khan 14974, Sajjad Badshah", cat:"Horror", link:"https://drive.google.com/drive/folders/1jsrKqnoYUp_hoZEvYcxE_pN9oCOJvzsY?usp=drive_link" },
+  { id:"row_25", title:"Ludo Remix", dev:"Umair Khan (15026), Sami Khan (14965), Fahad Sabir (15014)", cat:"Arcade", link:"https://drive.google.com/file/d/1zdYiBzxVe9nP9ywmmzCRGgG-NbSOqCKV/view?usp=sharing" },
+  { id:"row_28", title:"Sands Of The Forgotten Crown", dev:"Mudassir Munir-14879, M.Abbas-14853, M.Danyal-14998", cat:"RPG", link:"https://drive.google.com/file/d/1EpXjxLnIbr9xM_rCRRFijK3FxcH6Hqkj/view?usp=sharing" },
+  { id:"row_29", title:"SmartPark", dev:"Danyal 15082, Ali Ijaz 15200, Kamran Afzal 15146", cat:"Simulation", link:"https://drive.google.com/file/d/1dDXZ_8CmraVP27DV2ZaH5KQ-39NtqvEa/view?usp=sharing" },
+  { id:"row_30", title:"Fruit Survival", dev:"Asad Ullah Shah (15196), Ayesha Abrar (14900)", cat:"Platformer", link:"https://drive.google.com/drive/folders/12ag_sUc7XYAzZNA6XBf1UlVq7N009Bpm?usp=sharing" },
+  { id:"row_31", title:"Cube Runner", dev:"Sheikh Qasim Sabir (14767), Abdullah Mutaqi (14732)", cat:"Racing", link:"https://drive.google.com/drive/folders/1Atya-kH62lPPHCIvgFHpXs33PzGBML8z?usp=sharing" },
+  { id:"row_32", title:"Developer Life Simulator", dev:"Ali Noor 14843, M.Rayyan 14843", cat:"RPG", link:"https://drive.google.com/drive/folders/16CB7ua4AIP7ii8yCKU_UpKqFOK4o19OY?usp=drive_link" },
+  { id:"row_33", title:"Street Rebuild Racing", dev:"M.Huzaifa (14913), Mian Ahmad Shah (14957)", cat:"Racing", link:"https://drive.google.com/file/d/18Sv1_n90M4OcCYjLYrt5dzTYpI8XMaE3/view?usp=sharing" },
+  { id:"row_34", title:"Mouse Runner", dev:"Bakhtawar (14775), Malaika Akbar (14786), Kashmala (14797)", cat:"Arcade", link:"https://drive.google.com/drive/folders/1wFgtJyFpqjW5WHwZ1Df6u_g5rwZW3fhB?usp=drive_link" },
+  { id:"row_35", title:"I Am Solo", dev:"Ali Rehman 14744", cat:"Puzzle", link:"https://drive.google.com/drive/folders/1RjvRUVsHFqt8MJ1Qc0kt6pH06at8gaVg?usp=sharing" },
+  { id:"row_36", title:"Space Survival", dev:"Kamran Khan (14679), M.Abdullah (4792), Zeeshan Malik (14824)", cat:"Arcade", link:"https://drive.google.com/file/d/1JTlwbLBcHXK6s6ihxvqTc7HSdcTZAoPw/view?usp=sharing" },
+  { id:"row_37", title:"Zombie Apocalypse: Erika's Rise", dev:"Khair Ullah (15244), Harira (15218)", cat:"Survival", link:"https://drive.google.com/drive/folders/1rLMm1jhk_snyb0zt4qqySW391Bb7s2F4?usp=sharing" },
+  { id:"row_38", title:"Duskwalker", dev:"Rida Bilal 14661, Syed Roman Ali Shah 14740, Rubab Wajid 14641", cat:"Platformer", link:"https://drive.google.com/drive/folders/1_qF5VZ08s7YVHEPyRhNYghPGlwmU8SIg?usp=sharing" },
+  { id:"row_39", title:"Endless Runner (Neon Rush AI)", dev:"Syed Abdul Wahab (15406), Abdul Samad, Suliman Khan (15467)", cat:"Arcade", link:"https://drive.google.com/file/d/1G6Lqdm4G5gT7_kHTJK53RpuYft3Kwh1D/view?usp=sharing" },
+  { id:"row_40", title:"Project X-01", dev:"M.Usman 15426, Ubaid Ullah 15291, Ehtisham ul Hassan 15299", cat:"Horror", link:"https://drive.google.com/file/d/1ku9jMxUaX6lLgTEGzmhoNyvv1ed_Qp3t/view?usp=sharing" },
+  { id:"row_41", title:"One Wire Cut", dev:"M.Muqtasid Rana 15280, Ikram ud Din 15283, Aziz Ur Rehman 15465", cat:"Puzzle", link:"https://drive.google.com/file/d/1OEVeSIrCPBOL1R79wdiuj2xrw9yMomD3/view?usp=sharing" },
+  { id:"row_42", title:"Lost Path", dev:"M.Rizwan Khan 15039, M.Bilal 15035", cat:"Action", link:"https://drive.google.com/file/d/1bQXlDMxRlO7ysWNt7SUydrGqHkJY97OG/view?usp=sharing" },
+  { id:"row_43", title:"Shadow Survival", dev:"M.Hasnain (14854), Javaria Ahmad (14902)", cat:"Survival", link:"https://drive.google.com/file/d/1cTlUBuGlHqUEMp6-8496DXefKGAo2IaW/view?usp=drive_link" },
+  { id:"row_44", title:"Bullet Fracture", dev:"Hilal Hussain 14846, M.Mustafa 14811, Asif Bilal 14963", cat:"Platformer", link:"https://drive.google.com/file/d/1IX1JGctD3fPQJncDgHMrT4XUTHUbfCAQ/view?usp=sharing" },
+  { id:"row_45", title:"Ludo Chaos", dev:"Laiba Zahid (14881), Syeda Gul Andam Ali Kazmi (14748)", cat:"Strategy", link:"https://drive.google.com/drive/folders/1dpWSnMXqp6tnjfmXiFUbMvXO9uv1_0Fq?usp=sharing" },
+  { id:"row_46", title:"Falling Star", dev:"Naveed (14646), Basit (14751)", cat:"Arcade", link:"" },
+  { id:"row_47", title:"No Escape", dev:"M.Uzair Khan", cat:"Horror", link:"https://drive.google.com/file/d/1Vqlt0ODxuEGtukVO-uH81Q50gjzXzT1l/view?usp=drive_link" },
+  { id:"row_48", title:"Go Back", dev:"Asim Nisar", cat:"Action", link:"https://drive.google.com/drive/folders/13bq2tJSA_E9YkWEoxZSP955rEMk7yIXZ?usp=drive_link" },
+  { id:"row_49", title:"Shadow Escape (World of Light)", dev:"Tasawar Ali (15292), Sher Dill Maaz Khan (15454), Waheed Ullah (15461)", cat:"Puzzle", link:"https://drive.google.com/drive/folders/1ysuGftHveVCSqwz1cGCJndRrN-Usg-57?usp=sharing" },
+];
+
+const CAT_CLASS = {
+  Action:'action', Puzzle:'puzzle', Racing:'racing', Horror:'horror',
+  Arcade:'arcade', RPG:'rpg', Platformer:'platformer', Simulation:'simulation',
+  Strategy:'strategy', Survival:'survival', Adventure:'adventure'
+};
+
+let activeCategory = 'All';
+let searchQuery = '';
+
+const filtersEl  = document.getElementById('filters');
+const gridEl     = document.getElementById('gamesGrid');
+const noResEl    = document.getElementById('noResults');
+const titleEl    = document.getElementById('sectionTitle');
+const countEl    = document.getElementById('totalCount');
+const searchEl   = document.getElementById('searchInput');
+
+function catKey(cat) { return CAT_CLASS[cat] || 'default'; }
+
+function buildCard(g) {
+  const ck = catKey(g.cat);
+  const hasLink = g.link && g.link.startsWith('http');
+  return `
+    <div class="card">
+      <div class="card-thumb cat-${ck} em-${ck}"></div>
+      <div class="card-body">
+        <div class="card-category">${g.cat}</div>
+        <div class="card-title">${g.title}</div>
+        <div class="card-dev">${g.dev}</div>
+        <div class="card-btn">
+          <a class="btn-download${hasLink ? '' : ' btn-no-link'}"
+             ${hasLink ? `href="${g.link}" target="_blank" rel="noopener"` : ''}
+          >⬇ Download</a>
+        </div>
+      </div>
+    </div>`;
+}
+
+function getFiltered() {
+  return GAMES.filter(g => {
+    const catOk = activeCategory === 'All' || g.cat === activeCategory;
+    const q = searchQuery.toLowerCase().trim();
+    const searchOk = !q || g.title.toLowerCase().includes(q) || g.dev.toLowerCase().includes(q);
+    return catOk && searchOk;
+  });
+}
+
+function renderFilters() {
+  const cats = ['All', ...Array.from(new Set(GAMES.map(g => g.cat))).sort()];
+  filtersEl.innerHTML = cats.map(cat => {
+    const count = cat === 'All' ? GAMES.length : GAMES.filter(g => g.cat === cat).length;
+    return `<button class="pill${activeCategory === cat ? ' active' : ''}" data-cat="${cat}">
+      ${cat} <span class="count">${count}</span>
+    </button>`;
+  }).join('');
+  filtersEl.querySelectorAll('.pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      renderAll();
+    });
+  });
+}
+
+function renderGrid() {
+  const filtered = getFiltered();
+  countEl.textContent = filtered.length;
+  titleEl.textContent = activeCategory === 'All' ? 'All Games' : activeCategory + ' Games';
+  if (filtered.length === 0) {
+    gridEl.innerHTML = '';
+    noResEl.style.display = 'block';
+  } else {
+    noResEl.style.display = 'none';
+    gridEl.innerHTML = filtered.map(buildCard).join('');
+  }
+}
+
+function renderAll() { renderFilters(); renderGrid(); }
+
+searchEl.addEventListener('input', e => { searchQuery = e.target.value; renderAll(); });
+
+renderAll();
+</script>
+</body>
+</html>
