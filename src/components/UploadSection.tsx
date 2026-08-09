@@ -115,8 +115,7 @@ export function UploadSection() {
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           className="text-center"
         >
@@ -135,8 +134,7 @@ export function UploadSection() {
         {/* Form */}
         <motion.form
           initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
           onSubmit={handleSubmit}
           className="mt-10 glass rounded-3xl p-6 md:p-10 shadow-[0_20px_60px_-20px_oklch(0.55_0.28_305_/_0.6)]"

@@ -99,22 +99,26 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.1,
-      smoothWheel: true,
-    });
+    try {
+      const lenis = new Lenis({
+        lerp: 0.1,
+        smoothWheel: true,
+      });
 
-    let rafId: number;
-    const raf = (time: number) => {
-      lenis.raf(time);
+      let rafId: number;
+      const raf = (time: number) => {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(raf);
+      };
       rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
 
-    return () => {
-      lenis.destroy();
-      cancelAnimationFrame(rafId);
-    };
+      return () => {
+        lenis.destroy();
+        cancelAnimationFrame(rafId);
+      };
+    } catch (e) {
+      console.warn("Lenis init skipped:", e);
+    }
   }, []);
 
   return (

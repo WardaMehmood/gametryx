@@ -8,8 +8,7 @@ export function GameCard({ game, index = 0 }: { game: Game; index?: number }) {
     <Link to="/game/$id" params={{ id: game.id }} className="block">
       <motion.article
         initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: (index % 5) * 0.05 }}
         className="group hover-glow relative overflow-hidden rounded-2xl glass"
       >
