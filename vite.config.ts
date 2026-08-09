@@ -13,5 +13,5 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
-  base: '/gametryx/'
+  base: "/gametryx/",
 });
