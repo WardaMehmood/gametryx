@@ -12,4 +12,16 @@ export type Game = {
 // Data now comes from the useGames hook pulling from public/Project Submission (Responses).xlsx
 // The static GAMES array has been removed.
 
-export const CATEGORIES = ["Action", "Arcade", "Puzzle", "Horror", "Racing", "Platformer", "RPG", "Simulation", "Strategy", "Survival", "Adventure"] as const;
+export const CATEGORIES = [
+  "Action",
+  "Arcade",
+  "Puzzle",
+  "Horror",
+  "Racing",
+  "Platformer",
+  "RPG",
+  "Simulation",
+  "Strategy",
+  "Survival",
+  "Adventure",
+] as const;

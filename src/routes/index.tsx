@@ -23,11 +23,15 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-export const Route = createFileRoute("/")(({
+export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Game Tryx — Discover. Download. Play." },
-      { name: "description", content: "Neon-lit indie game showcase. Discover, download and play games crafted by developers and students." },
+      {
+        name: "description",
+        content:
+          "Neon-lit indie game showcase. Discover, download and play games crafted by developers and students.",
+      },
       { property: "og:title", content: "Game Tryx — Indie Game Showcase" },
       { property: "og:description", content: "A futuristic gaming launcher for indie creators." },
     ],
@@ -41,7 +45,7 @@ export const Route = createFileRoute("/")(({
     ],
   }),
   component: Index,
-}));
+});
 
 // Lucide icon map per category
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -67,9 +71,10 @@ function Index() {
   // Helper to apply search text filter
   const filterBySearch = (gameList: Game[]) => {
     if (!searchQuery.trim()) return gameList;
-    return gameList.filter((g) =>
-      g.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      g.developer.toLowerCase().includes(searchQuery.toLowerCase())
+    return gameList.filter(
+      (g) =>
+        g.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        g.developer.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   };
 
@@ -78,9 +83,10 @@ function Index() {
 
   // Dynamically derive categories from loaded game data
   const allCategories = Array.from(new Set(games.map((g) => g.category).filter(Boolean))).sort();
-  const categoriesToShow = selectedCategory === "All"
-    ? allCategories
-    : allCategories.filter((c) => c === selectedCategory);
+  const categoriesToShow =
+    selectedCategory === "All"
+      ? allCategories
+      : allCategories.filter((c) => c === selectedCategory);
 
   // Filter tabs: "All" first, then sorted categories
   const filterTabs = ["All", ...allCategories];
@@ -98,13 +104,15 @@ function Index() {
         />
 
         <div id="games-section" className="mx-auto max-w-7xl px-6 py-12 md:py-16 scroll-mt-20">
-
           {/* ── Skeleton while loading ── */}
           {loading && (
             <div className="space-y-8">
               <div className="flex gap-2 overflow-x-hidden">
                 {[...Array(7)].map((_, i) => (
-                  <div key={i} className="h-9 w-24 shrink-0 rounded-full bg-white/5 animate-pulse" />
+                  <div
+                    key={i}
+                    className="h-9 w-24 shrink-0 rounded-full bg-white/5 animate-pulse"
+                  />
                 ))}
               </div>
               <div className="flex flex-col gap-6">
@@ -133,8 +141,11 @@ function Index() {
                 {filterTabs.map((cat) => {
                   const isActive = selectedCategory === cat;
                   const IconComponent = CATEGORY_ICONS[cat] ?? LayoutGrid;
-                  const count = cat === "All" ? trendingGames.length : trendingGames.filter(g => g.category === cat).length;
-                  
+                  const count =
+                    cat === "All"
+                      ? trendingGames.length
+                      : trendingGames.filter((g) => g.category === cat).length;
+
                   return (
                     <button
                       key={cat}
@@ -143,8 +154,10 @@ function Index() {
                       style={
                         isActive
                           ? {
-                              background: "linear-gradient(135deg, oklch(0.55 0.28 305), oklch(0.6 0.22 240))",
-                              boxShadow: "0 0 16px oklch(0.55 0.28 305 / 0.5), 0 0 4px oklch(0.55 0.28 305 / 0.3)",
+                              background:
+                                "linear-gradient(135deg, oklch(0.55 0.28 305), oklch(0.6 0.22 240))",
+                              boxShadow:
+                                "0 0 16px oklch(0.55 0.28 305 / 0.5), 0 0 4px oklch(0.55 0.28 305 / 0.3)",
                               borderColor: "oklch(0.55 0.28 305 / 0.7)",
                               color: "#fff",
                             }
@@ -163,7 +176,7 @@ function Index() {
                     >
                       <IconComponent size={13} strokeWidth={2} />
                       <span>{cat}</span>
-                      <span 
+                      <span
                         className={`ml-0.5 flex items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] leading-none ${
                           isActive ? "bg-white/20 text-white" : "bg-white/10 text-muted-foreground"
                         }`}
@@ -178,7 +191,8 @@ function Index() {
               <div
                 className="mt-5 h-px w-full"
                 style={{
-                  background: "linear-gradient(to right, transparent, oklch(0.55 0.28 305 / 0.3), transparent)",
+                  background:
+                    "linear-gradient(to right, transparent, oklch(0.55 0.28 305 / 0.3), transparent)",
                 }}
               />
             </div>
@@ -197,37 +211,37 @@ function Index() {
               {categoriesToShow.map((cat) => {
                 const categoryGames = filterBySearch(games.filter((g) => g.category === cat));
                 if (categoryGames.length === 0) return null;
-                return (
-                  <CategoryRow
-                    key={cat}
-                    title={cat}
-                    games={categoryGames}
-                    limit={500}
-                  />
-                );
+                return <CategoryRow key={cat} title={cat} games={categoryGames} limit={500} />;
               })}
 
               {categoriesToShow.every(
-                (cat) => filterBySearch(games.filter((g) => g.category === cat)).length === 0
+                (cat) => filterBySearch(games.filter((g) => g.category === cat)).length === 0,
               ) && (
                 <div className="text-center py-20 opacity-70">
                   <h3 className="text-2xl font-bold">
                     No games found{searchQuery ? ` for "${searchQuery}"` : ""}
                   </h3>
-                  <p className="mt-2 text-muted-foreground">Try searching for a different title or developer.</p>
+                  <p className="mt-2 text-muted-foreground">
+                    Try searching for a different title or developer.
+                  </p>
                 </div>
               )}
             </div>
           )}
 
           {/* ── No search results ── */}
-          {!loading && !error && selectedCategory === "All" && trendingGames.length === 0 && searchQuery && (
-            <div className="text-center py-20 opacity-70">
-              <h3 className="text-2xl font-bold">No games found for "{searchQuery}"</h3>
-              <p className="mt-2 text-muted-foreground">Try searching for a different title or developer.</p>
-            </div>
-          )}
-
+          {!loading &&
+            !error &&
+            selectedCategory === "All" &&
+            trendingGames.length === 0 &&
+            searchQuery && (
+              <div className="text-center py-20 opacity-70">
+                <h3 className="text-2xl font-bold">No games found for "{searchQuery}"</h3>
+                <p className="mt-2 text-muted-foreground">
+                  Try searching for a different title or developer.
+                </p>
+              </div>
+            )}
         </div>
 
         <UploadSection />

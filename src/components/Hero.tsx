@@ -62,16 +62,20 @@ export function Hero({
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   className="flex-1 md:flex-none cursor-pointer rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary appearance-none"
                 >
-                  <option value="All" className="bg-background">All Categories</option>
+                  <option value="All" className="bg-background">
+                    All Categories
+                  </option>
                   {categories.map((cat) => (
                     <option key={cat} value={cat} className="bg-background">
                       {cat}
                     </option>
                   ))}
                 </select>
-                <button 
+                <button
                   onClick={() => {
-                    document.getElementById('games-section')?.scrollIntoView({ behavior: 'smooth' });
+                    document
+                      .getElementById("games-section")
+                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="rounded-xl bg-gradient-to-r from-primary to-accent px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_12px_oklch(0.55_0.28_305_/_0.5)] transition hover:scale-105"
                 >

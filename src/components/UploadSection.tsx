@@ -8,28 +8,28 @@ const FORM_ACTION =
 
 // Google Form field entry IDs
 const ENTRY = {
-  groupName:   "entry.1548349999",
-  driveLink:   "entry.1115536100",
-  gameName:    "entry.1261181719",
+  groupName: "entry.1548349999",
+  driveLink: "entry.1115536100",
+  gameName: "entry.1261181719",
   description: "entry.1642093413",
 };
 
 type Status = "idle" | "loading" | "success" | "error";
 
 export function UploadSection() {
-  const [status, setStatus]       = useState<Status>("idle");
-  const [gameName, setGameName]   = useState("");
+  const [status, setStatus] = useState<Status>("idle");
+  const [gameName, setGameName] = useState("");
   const [groupName, setGroupName] = useState("");
   const [driveLink, setDriveLink] = useState("");
-  const [description, setDesc]    = useState("");
-  const [category, setCategory]   = useState(CATEGORIES[0]);
-  const [errors, setErrors]       = useState<Record<string, string>>({});
+  const [description, setDesc] = useState("");
+  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   function validate() {
     const e: Record<string, string> = {};
-    if (!gameName.trim())   e.gameName   = "Game name is required";
-    if (!groupName.trim())  e.groupName  = "Developer / group name is required";
-    if (!driveLink.trim())  e.driveLink  = "Google Drive link is required";
+    if (!gameName.trim()) e.gameName = "Game name is required";
+    if (!groupName.trim()) e.groupName = "Developer / group name is required";
+    if (!driveLink.trim()) e.driveLink = "Google Drive link is required";
     else if (!driveLink.startsWith("http")) e.driveLink = "Enter a valid URL";
     if (!description.trim()) e.description = "Description is required";
     return e;
@@ -38,7 +38,10 @@ export function UploadSection() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
     setErrors({});
     setStatus("loading");
 
@@ -46,17 +49,20 @@ export function UploadSection() {
     const fullDescription = `${description.trim()}, ${category}`;
 
     const body = new FormData();
-    body.append(ENTRY.gameName,   gameName.trim());
-    body.append(ENTRY.groupName,  groupName.trim());
-    body.append(ENTRY.driveLink,  driveLink.trim());
+    body.append(ENTRY.gameName, gameName.trim());
+    body.append(ENTRY.groupName, groupName.trim());
+    body.append(ENTRY.driveLink, driveLink.trim());
     body.append(ENTRY.description, fullDescription);
 
     try {
       // no-cors: we can't read the response but the data IS submitted
       await fetch(FORM_ACTION, { method: "POST", body, mode: "no-cors" });
       setStatus("success");
-      setGameName(""); setGroupName(""); setDriveLink("");
-      setDesc(""); setCategory(CATEGORIES[0]);
+      setGameName("");
+      setGroupName("");
+      setDriveLink("");
+      setDesc("");
+      setCategory(CATEGORIES[0]);
     } catch {
       setStatus("error");
     }
@@ -65,13 +71,24 @@ export function UploadSection() {
   if (status === "success") {
     return (
       <section id="upload" className="relative py-24">
-        <div className="absolute inset-0 -z-10" style={{ background: "radial-gradient(ellipse at center, oklch(0.55 0.28 305 / 0.18), transparent 70%)" }} />
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, oklch(0.55 0.28 305 / 0.18), transparent 70%)",
+          }}
+        />
         <div className="mx-auto max-w-xl px-6 text-center">
-          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 200 }}>
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 200 }}
+          >
             <CheckCircle2 className="mx-auto mb-6 size-20 text-green-400" strokeWidth={1.5} />
             <h2 className="text-3xl font-bold">Game Submitted!</h2>
             <p className="mt-3 text-muted-foreground">
-              Thank you! Your game has been submitted for review. It will appear on the site after the next update.
+              Thank you! Your game has been submitted for review. It will appear on the site after
+              the next update.
             </p>
             <button
               onClick={() => setStatus("idle")}
@@ -87,9 +104,14 @@ export function UploadSection() {
 
   return (
     <section id="upload" className="relative py-24">
-      <div className="absolute inset-0 -z-10" style={{ background: "radial-gradient(ellipse at center, oklch(0.55 0.28 305 / 0.18), transparent 70%)" }} />
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, oklch(0.55 0.28 305 / 0.18), transparent 70%)",
+        }}
+      />
       <div className="mx-auto max-w-4xl px-6">
-
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -105,7 +127,8 @@ export function UploadSection() {
             Upload Your <span className="neon-text">Game</span>
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-            Share your creation with the community. We only store the Google Drive link — no files are hosted here.
+            Share your creation with the community. We only store the Google Drive link — no files
+            are hosted here.
           </p>
         </motion.div>
 
@@ -139,7 +162,9 @@ export function UploadSection() {
                   className="flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
-              {errors.gameName && <p className="mt-1 text-xs text-destructive">{errors.gameName}</p>}
+              {errors.gameName && (
+                <p className="mt-1 text-xs text-destructive">{errors.gameName}</p>
+              )}
             </div>
 
             {/* Developer Name */}
@@ -155,7 +180,9 @@ export function UploadSection() {
                   className="flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
-              {errors.groupName && <p className="mt-1 text-xs text-destructive">{errors.groupName}</p>}
+              {errors.groupName && (
+                <p className="mt-1 text-xs text-destructive">{errors.groupName}</p>
+              )}
             </div>
 
             {/* Category */}
@@ -167,7 +194,11 @@ export function UploadSection() {
                 onChange={(e) => setCategory(e.target.value as typeof category)}
                 className="mt-2 w-full rounded-xl border border-primary/30 bg-input/40 px-4 py-3 text-sm outline-none transition focus:border-primary focus:shadow-[0_0_20px_oklch(0.55_0.28_305_/_0.4)]"
               >
-                {CATEGORIES.map((c) => <option key={c} className="bg-card">{c}</option>)}
+                {CATEGORIES.map((c) => (
+                  <option key={c} className="bg-card">
+                    {c}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -185,7 +216,9 @@ export function UploadSection() {
                   className="flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
-              {errors.driveLink && <p className="mt-1 text-xs text-destructive">{errors.driveLink}</p>}
+              {errors.driveLink && (
+                <p className="mt-1 text-xs text-destructive">{errors.driveLink}</p>
+              )}
             </div>
 
             {/* Description */}
@@ -199,7 +232,9 @@ export function UploadSection() {
                 onChange={(e) => setDesc(e.target.value)}
                 className={`mt-2 w-full rounded-xl border px-4 py-3 text-sm outline-none transition ${errors.description ? "border-destructive/60 bg-destructive/5" : "border-primary/30 bg-input/40 focus:border-primary focus:shadow-[0_0_20px_oklch(0.55_0.28_305_/_0.4)]"}`}
               />
-              {errors.description && <p className="mt-1 text-xs text-destructive">{errors.description}</p>}
+              {errors.description && (
+                <p className="mt-1 text-xs text-destructive">{errors.description}</p>
+              )}
             </div>
           </div>
 
@@ -216,7 +251,8 @@ export function UploadSection() {
           </button>
 
           <p className="mt-4 text-center text-xs text-muted-foreground">
-            Your data is sent directly to our review sheet. Games appear on the site after the next update.
+            Your data is sent directly to our review sheet. Games appear on the site after the next
+            update.
           </p>
         </motion.form>
       </div>
@@ -225,7 +261,11 @@ export function UploadSection() {
 }
 
 function Label({ children }: { children: React.ReactNode }) {
-  return <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{children}</label>;
+  return (
+    <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+      {children}
+    </label>
+  );
 }
 
 function fieldCls(error?: string) {
