@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Search, ChevronDown } from "lucide-react";
-import heroBg from "@/assets/hero-bg.png";
+import heroBg from "@/assets/hero-bg.svg";
 
 export function Hero({
   searchQuery,
