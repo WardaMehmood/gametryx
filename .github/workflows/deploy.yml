@@ -37,7 +37,7 @@ jobs:
   deploy:
     name: Deploy to Cloudflare
     needs: lint-and-build
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && secrets.CLOUDFLARE_API_TOKEN != '' }}
     runs-on: ubuntu-latest
 
     steps:
