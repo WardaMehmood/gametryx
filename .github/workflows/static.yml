@@ -22,27 +22,51 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
+
       - name: Install dependencies
         run: npm ci
-      - name: Build
+
+      - name: Build project
         run: npm run build
-      - name: Copy index.html for static serving
+
+      - name: Generate static index.html & 404.html for GitHub Pages
         run: |
-          if [ -f index.html ]; then
-            cp index.html dist/client/index.html
-            cp index.html dist/client/404.html
-          fi
+          CSS_FILE=$(basename $(ls dist/client/assets/styles-*.css | head -n 1))
+          JS_FILE=$(basename $(ls dist/client/assets/index-*.js | head -n 1))
+          
+          cat <<EOF > dist/client/index.html
+          <!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+              <title>Gametryx - Indie Game Showcase</title>
+              <link rel="icon" type="image/png" href="./favicon.png" />
+              <link rel="stylesheet" href="./assets/${CSS_FILE}" />
+            </head>
+            <body>
+              <div id="root"></div>
+              <script type="module" src="./assets/${JS_FILE}"></script>
+            </body>
+          </html>
+          EOF
+          
+          cp dist/client/index.html dist/client/404.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist/client'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
